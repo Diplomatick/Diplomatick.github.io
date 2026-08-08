@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expressionale Designz — Wear Your Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#151B33;
+    --cobalt:#2B4C9E;
+    --crimson:#B8283F;
+    --marigold:#E8A63D;
+    --ivory:#F7F3EA;
+    --ink:#1A1A1A;
+    --line: rgba(255,255,255,0.14);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:900;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--indigo);
+    color:#fff;
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+  .header-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    padding:16px 32px;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.15rem;
+  }
+  .logo-mark{
+    width:38px; height:38px;
+    border-radius:50%;
+    background:var(--crimson);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem;
+    flex-shrink:0;
+  }
+  nav{display:flex; gap:28px;}
+  nav a{
+    font-size:0.94rem;
+    font-weight:500;
+    opacity:0.85;
+    position:relative;
+    padding:4px 0;
+    transition:opacity .2s;
+  }
+  nav a:hover{opacity:1;}
+  nav a::after{
+    content:'';
+    position:absolute; left:0; bottom:0;
+    width:0%; height:2px;
+    background:var(--marigold);
+    transition:width .2s ease;
+  }
+  nav a:hover::after{width:100%;}
+
+  .header-actions{display:flex; align-items:center; gap:16px;}
+  .search{
+    display:flex;
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+  }
+  .search input{
+    background:transparent;
+    border:none;
+    padding:9px 14px;
+    color:#fff;
+    font-size:0.85rem;
+    width:170px;
+    outline:none;
+  }
+  .search input::placeholder{color:rgba(255,255,255,0.5);}
+  .search button{
+    background:var(--marigold);
+    border:none;
+    padding:9px 16px;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .cart{
+    position:relative;
+    width:40px; height:40px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    font-size:1.1rem;
+  }
+  .cart-count{
+    position:absolute; top:-6px; right:-6px;
+    background:var(--crimson);
+    color:#fff;
+    font-size:0.68rem;
+    font-weight:700;
+    width:19px; height:19px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-toggle{display:none; background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer;}
+
+  .mobile-menu{
+    display:none;
+    flex-direction:column;
+    background:var(--indigo);
+    border-top:1px solid var(--line);
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+  }
+  .mobile-menu.open{max-height:400px;}
+  .mobile-menu a{
+    color:#fff;
+    font-size:1rem;
+    font-weight:500;
+    padding:16px 32px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-menu a.active{color:var(--marigold);}
+  .mobile-menu .mobile-search{
+    display:flex;
+    padding:14px 32px 18px;
+    gap:8px;
+  }
+  .mobile-menu .mobile-search input{
+    flex:1;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:9px 14px;
+    color:#fff;
+    font-size:0.85rem;
+    outline:none;
+  }
+  .mobile-menu .mobile-search input::placeholder{color:rgba(255,255,255,0.5);}
+  .mobile-menu .mobile-search button{
+    background:var(--marigold);
+    border:none;
+    padding:9px 16px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    color:var(--ink);
+  }
+
+
+  /* woven stripe divider — signature element */
+  .weave{
+    height:8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--crimson) 0 18px,
+      var(--marigold) 18px 30px,
+      var(--cobalt) 30px 54px,
+      var(--ivory) 54px 60px
+    );
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:var(--indigo);
+    color:#fff;
+    overflow:hidden;
+  }
+  .hero-slider{
+    position:relative;
+    height:560px;
+    overflow:hidden;
+  }
+  .hero-track{
+    display:flex;
+    height:100%;
+    transition:transform .6s cubic-bezier(.65,0,.35,1);
+  }
+  .hero-slide{
+    position:relative;
+    flex:0 0 100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+  }
+  .hero-slide .slide-bg{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .hero-slide .slide-bg::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, rgba(21,27,51,0.88) 0%, rgba(21,27,51,0.55) 55%, rgba(21,27,51,0.15) 100%);
+  }
+  .slide-bg.s1{background-color:var(--cobalt); background-image:repeating-linear-gradient(45deg, var(--cobalt) 0 12px, #1d3a80 12px 24px), repeating-linear-gradient(-45deg, transparent 0 40px, var(--crimson) 40px 42px);}
+  .slide-bg.s2{background-color:var(--crimson); background-image:repeating-linear-gradient(120deg, var(--crimson) 0 14px, #8f1e30 14px 26px), repeating-linear-gradient(0deg, transparent 0 34px, var(--marigold) 34px 36px);}
+  .slide-bg.s3{background-color:var(--marigold); background-image:repeating-linear-gradient(60deg, var(--marigold) 0 16px, #c98a26 16px 30px), repeating-linear-gradient(-30deg, transparent 0 30px, var(--indigo) 30px 32px);}
+  .slide-bg.s4{background-color:#3a2a80; background-image:repeating-linear-gradient(100deg, #3a2a80 0 12px, #2a1d5e 12px 24px), repeating-linear-gradient(20deg, transparent 0 36px, var(--crimson) 36px 38px);}
+
+  .hero-copy{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:60px 32px 60px 48px;
+    max-width:560px;
+  }
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    font-size:0.75rem;
+    font-weight:600;
+    color:var(--marigold);
+    margin-bottom:18px;
+  }
+  .hero-copy h1{
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    line-height:1.03;
+    margin-bottom:20px;
+  }
+  .hero-copy h1 em{
+    font-style:normal;
+    color:var(--marigold);
+  }
+  .hero-copy p{
+    color:rgba(255,255,255,0.85);
+    font-size:1.02rem;
+    margin-bottom:32px;
+    max-width:420px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 28px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    border:none;
+    width:fit-content;
+    transition:transform .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--marigold); color:var(--ink);}
+  .btn-outline{background:transparent; color:#fff; border:1px solid var(--line);}
+
+  /* carousel controls */
+  .hero-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:3;
+    width:46px; height:46px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.3);
+    color:#fff;
+    font-size:1.2rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .2s ease;
+  }
+  .hero-arrow:hover{background:var(--marigold); color:var(--ink); border-color:var(--marigold);}
+  .hero-arrow.prev{left:20px;}
+  .hero-arrow.next{right:20px;}
+
+  .hero-dots{
+    position:absolute;
+    bottom:22px;
+    left:0; right:0;
+    z-index:3;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+  }
+  .hero-dots button{
+    width:9px; height:9px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.4);
+    border:none;
+    cursor:pointer;
+    padding:0;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .hero-dots button.active{
+    background:var(--marigold);
+    transform:scale(1.3);
+  }
+
+  /* ---------- Section headings ---------- */
+  .section{padding:80px 0;}
+  .section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    margin-bottom:40px;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{font-size:clamp(1.8rem, 3vw, 2.4rem);}
+  .section-head p{color:#5a5a5a; max-width:420px;}
+
+  /* ---------- Product grid ---------- */
+  .products{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  .card{
+    background:#fff;
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.06);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(21,27,51,0.14);
+  }
+  .card-media{
+    aspect-ratio:4/5;
+    position:relative;
+  }
+  .card-media .tag{
+    position:absolute; top:14px; left:14px;
+    background:var(--crimson);
+    color:#fff;
+    font-size:0.68rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:5px 10px;
+    border-radius:999px;
+  }
+  .p1{background:repeating-linear-gradient(60deg, var(--cobalt) 0 14px, #1d3a80 14px 28px, var(--crimson) 28px 30px);}
+  .p2{background:repeating-linear-gradient(15deg, var(--marigold) 0 20px, #cf9530 20px 38px), repeating-linear-gradient(105deg, transparent 0 36px, #2c2c2c 36px 38px);}
+  .p3{background:repeating-linear-gradient(90deg, #4527a0 0 10px, var(--cobalt) 10px 22px);}
+  .card-body{padding:20px;}
+  .card-body .kicker{font-size:0.75rem; color:var(--crimson); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;}
+  .card-body h3{font-size:1.15rem; margin-bottom:6px;}
+  .card-body .price-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:14px;
+  }
+  .price{font-weight:700; font-size:1.05rem;}
+  .add-btn{
+    background:var(--indigo);
+    color:#fff;
+    border:none;
+    padding:9px 16px;
+    border-radius:999px;
+    font-size:0.82rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .add-btn:hover{background:var(--crimson);}
+
+  /* ---------- CTA banner ---------- */
+  .cta-banner{
+    background:var(--crimson);
+    color:#fff;
+    text-align:center;
+    padding:56px 32px;
+  }
+  .cta-banner h2{font-size:clamp(1.4rem, 2.6vw, 1.9rem); margin-bottom:10px;}
+  .cta-banner p{opacity:0.9; margin-bottom:26px;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--indigo); color:rgba(255,255,255,0.75); padding:56px 0 28px;}
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:40px;
+    margin-bottom:40px;
+  }
+  .footer-col h4{color:#fff; font-size:0.95rem; margin-bottom:14px; font-family:'Inter'; font-weight:600;}
+  .footer-col p, .footer-col a{font-size:0.88rem; display:block; margin-bottom:8px; color:rgba(255,255,255,0.7);}
+  .footer-col a:hover{color:var(--marigold);}
+  .footer-bottom{
+    border-top:1px solid var(--line);
+    padding-top:22px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:0.8rem;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    nav, .search{display:none;}
+    .nav-toggle{display:block;}
+    .mobile-menu{display:flex;}
+    .hero-slider{height:640px;}
+    .hero-copy{padding:44px 28px; max-width:100%;}
+    .hero-arrow{width:38px; height:38px; font-size:1rem;}
+    .products{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr; gap:28px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-mark">✋</span>
+      Expressionale Designz
+    </div>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search">
+        <input type="text" placeholder="Search products...">
+        <button type="button">Search</button>
+      </div>
+      <a class="cart" id="cartIcon" href="cart.html">
+        🛍️
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="active">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    <div class="mobile-search"><input type="text" placeholder="Search products..."><button type="button">Search</button></div></div>
+
+<div class="weave"></div>
+
+<section class="hero">
+  <div class="hero-slider" id="heroSlider">
+    <div class="hero-track" id="heroTrack">
+
+      <div class="hero-slide">
+        <div class="slide-bg s1"></div>
+        <div class="hero-copy">
+          <div class="eyebrow">Handcrafted African Wax Prints</div>
+          <h1>Wear a story <em>woven</em> by hand.</h1>
+          <p>Bold Ankara silhouettes, tailored gele wraps, and one-of-a-kind pieces made by artisans who cut every yard with intention.</p>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a href="shop.html" class="btn btn-primary">Shop the Collection</a>
+            <a href="gallery.html" class="btn btn-outline">View Lookbook</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-slide">
+        <div class="slide-bg s2"></div>
+        <div class="hero-copy">
+          <div class="eyebrow">New Season</div>
+          <h1>New season, <em>new</em> silhouettes.</h1>
+          <p>Fresh cuts and colorways just landed — runway-tested pieces made for everyday extravagance.</p>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a href="shop.html" class="btn btn-primary">Shop New Arrivals</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-slide">
+        <div class="slide-bg s3"></div>
+        <div class="hero-copy">
+          <div class="eyebrow">Our Craft</div>
+          <h1>Handmade in <em>every</em> stitch.</h1>
+          <p>From dye vat to hemline, every Expressionale piece passes through the hands of a real artisan — never a factory line.</p>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a href="gallery.html" class="btn btn-primary">View Lookbook</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-slide">
+        <div class="slide-bg s4"></div>
+        <div class="hero-copy">
+          <div class="eyebrow">Made For You</div>
+          <h1>Custom fittings <em>available</em>.</h1>
+          <p>Have a piece in mind? Our tailoring house builds bespoke fits for special occasions and standing orders.</p>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a href="contact.html" class="btn btn-primary">Contact Us</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="hero-arrow prev" id="heroPrev" aria-label="Previous slide">‹</button>
+    <button class="hero-arrow next" id="heroNext" aria-label="Next slide">›</button>
+    <div class="hero-dots" id="heroDots"></div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section class="section" id="featured">
+    <div class="section-head">
+      <div>
+        <h2>Featured Pieces</h2>
+        <p>Three signature looks from this season's drop — each cut and dyed in small batches.</p>
+      </div>
+      <a href="shop.html" class="btn btn-outline" style="color:var(--ink); border-color:rgba(0,0,0,0.15);">View All →</a>
+    </div>
+
+    <div class="products" id="productGrid">
+      <div class="card">
+        <div class="card-media p1"><span class="tag">New</span></div>
+        <div class="card-body">
+          <div class="kicker">Agbada Set</div>
+          <h3>Indigo Plaid Agbada</h3>
+          <p style="color:#666; font-size:0.9rem;">Flowing wax-print robe with coordinated beads.</p>
+          <div class="price-row">
+            <span class="price">$128.00</span>
+            <button class="add-btn" onclick="handleAdd(this)" data-id="p1" data-name="Indigo Plaid Agbada" data-price="128.00">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-media p2"><span class="tag">Bestseller</span></div>
+        <div class="card-body">
+          <div class="kicker">Kufi & Tunic</div>
+          <h3>Sunburst Patchwork Tunic</h3>
+          <p style="color:#666; font-size:0.9rem;">Color-blocked tunic with woven kufi cap.</p>
+          <div class="price-row">
+            <span class="price">$96.00</span>
+            <button class="add-btn" onclick="handleAdd(this)" data-id="p2" data-name="Sunburst Patchwork Tunic" data-price="96.00">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-media p3"><span class="tag">Limited</span></div>
+        <div class="card-body">
+          <div class="kicker">Gele & Dashiki</div>
+          <h3>Violet Adire Dashiki</h3>
+          <p style="color:#666; font-size:0.9rem;">Hand-dyed adire shirt with matching gele wrap.</p>
+          <div class="price-row">
+            <span class="price">$112.00</span>
+            <button class="add-btn" onclick="handleAdd(this)" data-id="p3" data-name="Violet Adire Dashiki" data-price="112.00">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="cta-banner" id="contact">
+  <h2>Let's make you look extravagant.</h2>
+  <p>Reach out for custom fittings, bulk orders, or bespoke fabric pairings.</p>
+  <a href="mailto:hello@expressionaledesignz.com" class="btn btn-primary" style="display:inline-flex;">Contact Us</a>
+</section>
+
+<footer id="about">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Expressionale Designz</h4>
+        <p>Contemporary fashion rooted in West African textile tradition — designed for everyday extravagance.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html">New Arrivals</a>
+        <a href="shop.html">Men</a>
+        <a href="shop.html">Accessories</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@expressionaledesignz.com">hello@expressionaledesignz.com</a>
+        <a href="tel:+2340000000000">+234 000 000 0000</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Expressionale Fashion Designs. All rights reserved.</span>
+      <span>Developed by Diplomatic</span>
+    </div>
+  </div>
+</footer>
+
+<script src="cart.js"></script>
+<script src="search.js"></script>
+<script>
+
+  function handleAdd(btn){
+    addToCart({
+      id: btn.dataset.id,
+      name: btn.dataset.name,
+      price: parseFloat(btn.dataset.price),
+      swatch: btn.closest('.card').querySelector('.card-media').className.match(/p\d/)[0]
+    });
+    const original = btn.textContent;
+    btn.textContent = 'Added ✓';
+    btn.style.background = 'var(--marigold)';
+    btn.style.color = '#1A1A1A';
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1200);
+  }
+
+  // mobile nav toggle — wired first so it can never be blocked by anything below
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    navToggle.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    });
+  });
+  window.addEventListener('resize', () => {
+    if(window.innerWidth > 860){
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    }
+  });
+
+  // header search — sends the query to the Shop page, where the full catalog lives
+  try { initSiteSearch(); } catch (e) { console.error('Search init failed:', e); }
+
+  // hero carousel
+  try {
+    const track = document.getElementById('heroTrack');
+    const slides = track.children;
+    const total = slides.length;
+    const dotsWrap = document.getElementById('heroDots');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    const slider = document.getElementById('heroSlider');
+    let current = 0;
+    let autoplayTimer = null;
+
+    // build dots
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('button');
+      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsWrap.appendChild(dot);
+    }
+    const dots = dotsWrap.children;
+
+    function goToSlide(index){
+      current = (index + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      Array.from(dots).forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function nextSlide(){ goToSlide(current + 1); }
+    function prevSlide(){ goToSlide(current - 1); }
+
+    prevBtn.addEventListener('click', () => { prevSlide(); restartAutoplay(); });
+    nextBtn.addEventListener('click', () => { nextSlide(); restartAutoplay(); });
+
+    function startAutoplay(){
+      autoplayTimer = setInterval(nextSlide, 6000);
+    }
+    function restartAutoplay(){
+      clearInterval(autoplayTimer);
+      startAutoplay();
+    }
+    startAutoplay();
+
+    slider.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+    slider.addEventListener('mouseleave', startAutoplay);
+
+    // swipe / drag support
+    let dragStartX = 0;
+    let isDragging = false;
+
+    function dragStart(x){
+      isDragging = true;
+      dragStartX = x;
+      clearInterval(autoplayTimer);
+    }
+    function dragEnd(x){
+      if (!isDragging) return;
+      isDragging = false;
+      const delta = x - dragStartX;
+      if (delta > 50) prevSlide();
+      else if (delta < -50) nextSlide();
+      startAutoplay();
+    }
+
+    slider.addEventListener('touchstart', e => dragStart(e.touches[0].clientX), { passive: true });
+    slider.addEventListener('touchend', e => dragEnd(e.changedTouches[0].clientX));
+
+    slider.addEventListener('mousedown', e => { dragStart(e.clientX); e.preventDefault(); });
+    window.addEventListener('mouseup', e => { if (isDragging) dragEnd(e.clientX); });
+  } catch (e) {
+    console.error('Hero carousel init failed:', e);
+  }
+</script>
+
+</body>
+</html>

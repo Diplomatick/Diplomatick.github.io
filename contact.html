@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Expressionale Designz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#151B33;
+    --cobalt:#2B4C9E;
+    --crimson:#B8283F;
+    --marigold:#E8A63D;
+    --emerald:#1E7A55;
+    --ivory:#F7F3EA;
+    --ink:#1A1A1A;
+    --line: rgba(255,255,255,0.14);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    line-height:1.5;
+    background:var(--ivory);
+  }
+  h1,h2,h3,.display{font-family:'Fraunces', serif; font-weight:900; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- Header (shared) ---------- */
+  header{background:var(--indigo); color:#fff; position:sticky; top:0; z-index:50;}
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    padding:16px 32px; max-width:1200px; margin:0 auto;
+  }
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:700; font-size:1.15rem;}
+  .logo-mark{
+    width:38px; height:38px; border-radius:50%; background:var(--crimson);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+  }
+  nav{display:flex; gap:28px;}
+  nav a{font-size:0.94rem; font-weight:500; opacity:0.85; position:relative; padding:4px 0; transition:opacity .2s;}
+  nav a:hover{opacity:1;}
+  nav a.active{opacity:1;}
+  nav a.active::after, nav a:hover::after{width:100%;}
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0%; height:2px;
+    background:var(--marigold); transition:width .2s ease;
+  }
+  .header-actions{display:flex; align-items:center; gap:16px;}
+  .search{display:flex; border-radius:999px; overflow:hidden; background:rgba(255,255,255,0.08); border:1px solid var(--line);}
+  .search input{background:transparent; border:none; padding:9px 14px; color:#fff; font-size:0.85rem; width:170px; outline:none;}
+  .search input::placeholder{color:rgba(255,255,255,0.5);}
+  .search button{background:var(--marigold); border:none; padding:9px 16px; font-weight:600; font-size:0.85rem; cursor:pointer; color:var(--ink);}
+  .cart{
+    position:relative; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,0.08); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;
+  }
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--crimson); color:#fff;
+    font-size:0.68rem; font-weight:700; width:19px; height:19px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-toggle{display:none; background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer;}
+
+  .mobile-menu{
+    display:none;
+    flex-direction:column;
+    background:var(--indigo);
+    border-top:1px solid var(--line);
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+  }
+  .mobile-menu.open{max-height:400px;}
+  .mobile-menu a{
+    color:#fff;
+    font-size:1rem;
+    font-weight:500;
+    padding:16px 32px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-menu a.active{color:var(--marigold);}
+  .mobile-menu .mobile-search{
+    display:flex;
+    padding:14px 32px 18px;
+    gap:8px;
+  }
+  .mobile-menu .mobile-search input{
+    flex:1;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:9px 14px;
+    color:#fff;
+    font-size:0.85rem;
+    outline:none;
+  }
+  .mobile-menu .mobile-search input::placeholder{color:rgba(255,255,255,0.5);}
+  .mobile-menu .mobile-search button{
+    background:var(--marigold);
+    border:none;
+    padding:9px 16px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    color:var(--ink);
+  }
+
+  .weave{
+    height:8px;
+    background: repeating-linear-gradient(90deg,
+      var(--crimson) 0 18px, var(--marigold) 18px 30px,
+      var(--cobalt) 30px 54px, var(--ivory) 54px 60px);
+  }
+
+  /* ---------- Contact hero ---------- */
+  .contact-hero{
+    text-align:center;
+    padding:56px 32px 10px;
+  }
+  .contact-hero h1{font-size:clamp(1.9rem, 4vw, 2.6rem); color:var(--indigo); margin-bottom:12px;}
+  .contact-hero p{color:#5a5a5a; max-width:520px; margin:0 auto;}
+
+  /* ---------- Contact layout ---------- */
+  .contact-layout{
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:40px;
+    padding:50px 32px 90px;
+    max-width:1100px;
+    margin:0 auto;
+    align-items:start;
+  }
+
+  .info-card{
+    background:var(--indigo);
+    color:#fff;
+    border-radius:var(--radius);
+    padding:34px 30px;
+  }
+  .info-card h3{font-family:'Inter'; font-size:1.1rem; margin-bottom:22px;}
+  .info-row{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .info-icon{
+    width:38px; height:38px;
+    border-radius:50%;
+    background:var(--marigold);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    font-size:1rem;
+  }
+  .info-row .label{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:rgba(255,255,255,0.55); margin-bottom:2px;}
+  .info-row .value{font-size:0.95rem; font-weight:500;}
+  .info-row a.value:hover{color:var(--marigold);}
+
+  .socials{display:flex; gap:12px; margin-top:26px;}
+  .socials a{
+    width:38px; height:38px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.1);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.95rem;
+    transition:background .2s;
+  }
+  .socials a:hover{background:var(--marigold); color:var(--ink);}
+
+  .map-swatch{
+    margin-top:26px;
+    border-radius:10px;
+    aspect-ratio:16/9;
+    background:repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 18px),
+               repeating-linear-gradient(-45deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 18px),
+               var(--cobalt);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem;
+    color:rgba(255,255,255,0.8);
+    text-align:center;
+    padding:16px;
+  }
+
+  /* ---------- Form ---------- */
+  .form-card{
+    background:#fff;
+    border-radius:var(--radius);
+    padding:36px 34px;
+    box-shadow:0 16px 40px rgba(21,27,51,0.1);
+  }
+  .form-card h3{font-family:'Inter'; font-size:1.1rem; margin-bottom:6px;}
+  .form-card .sub{color:#666; font-size:0.88rem; margin-bottom:26px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{font-size:0.82rem; font-weight:600; color:#333;}
+  .field input, .field select, .field textarea{
+    border:1px solid rgba(21,27,51,0.15);
+    border-radius:8px;
+    padding:11px 14px;
+    font-size:0.9rem;
+    font-family:inherit;
+    outline:none;
+    transition:border-color .2s;
+    background:#fdfcf9;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--cobalt);}
+  .field textarea{resize:vertical; min-height:110px;}
+
+  .submit-btn{
+    background:var(--crimson);
+    color:#fff;
+    border:none;
+    padding:14px 30px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:background .2s, transform .15s;
+  }
+  .submit-btn:hover{background:#96182c; transform:translateY(-2px);}
+  .submit-btn:disabled{opacity:0.6; cursor:not-allowed; transform:none;}
+
+  .form-status{
+    margin-top:16px;
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:none;
+  }
+  .form-status.success{display:block; background:rgba(30,122,85,0.12); color:var(--emerald);}
+  .form-status.error{display:block; background:rgba(184,40,63,0.1); color:var(--crimson);}
+
+  .error-text{color:var(--crimson); font-size:0.76rem; min-height:14px;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--indigo); color:rgba(255,255,255,0.75); padding:40px 0 24px;}
+  .footer-bottom{
+    max-width:1200px; margin:0 auto; padding:0 32px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:0.8rem;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    nav, .search{display:none;}
+    .nav-toggle{display:block;}
+    .mobile-menu{display:flex;}
+  }
+  @media (max-width: 900px){
+    .contact-layout{grid-template-columns:1fr; padding:40px 24px 70px;}
+  }
+  @media (max-width: 560px){
+    .form-row{grid-template-columns:1fr;}
+    .form-card{padding:28px 22px;}
+    .info-card{padding:28px 22px;}
+    .contact-hero{padding:40px 20px 6px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-mark">✋</span>
+      Expressionale Designz
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search">
+        <input type="text" placeholder="Search products...">
+        <button type="button">Search</button>
+      </div>
+      <a class="cart" id="cartIcon" href="cart.html">
+        🛍️
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html">About</a>
+  <a href="contact.html" class="active">Contact</a>
+  <div class="mobile-search"><input type="text" placeholder="Search products..."><button type="button">Search</button></div>
+</div>
+
+<div class="weave"></div>
+
+<section class="contact-hero wrap">
+  <h1>Let's Talk Fashion</h1>
+  <p>Custom fittings, bulk orders, collabs, or just questions about a piece — reach out and we'll get back to you within 1–2 business days.</p>
+</section>
+
+<div class="contact-layout">
+
+  <div class="info-card">
+    <h3>Get in touch</h3>
+
+    <div class="info-row">
+      <div class="info-icon">✉</div>
+      <div>
+        <div class="label">Email</div>
+        <a class="value" href="mailto:hello@expressionaledesignz.com">hello@expressionaledesignz.com</a>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-icon">☎</div>
+      <div>
+        <div class="label">Phone</div>
+        <a class="value" href="tel:+2340000000000">+234 000 000 0000</a>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-icon">📍</div>
+      <div>
+        <div class="label">Studio</div>
+        <div class="value">Lagos, Nigeria</div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-icon">🕐</div>
+      <div>
+        <div class="label">Hours</div>
+        <div class="value">Mon–Sat, 9am – 6pm</div>
+      </div>
+    </div>
+
+    <div class="socials">
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="Facebook">FB</a>
+      <a href="#" aria-label="TikTok">TT</a>
+    </div>
+
+    <div class="map-swatch">Studio location map<br>(embed a real map here)</div>
+  </div>
+
+  <div class="form-card">
+    <h3>Send us a message</h3>
+    <p class="sub">Fill out the form below — fields marked * are required.</p>
+
+    <form id="contactForm" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="fname">First Name *</label>
+          <input type="text" id="fname" name="fname" required>
+          <span class="error-text" id="err-fname"></span>
+        </div>
+        <div class="field">
+          <label for="lname">Last Name *</label>
+          <input type="text" id="lname" name="lname" required>
+          <span class="error-text" id="err-lname"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required>
+          <span class="error-text" id="err-email"></span>
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone">
+          <span class="error-text"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field full">
+          <label for="subject">What's this about? *</label>
+          <select id="subject" name="subject" required>
+            <option value="">Select one</option>
+            <option value="order">Custom Order</option>
+            <option value="bulk">Bulk / Wholesale Inquiry</option>
+            <option value="collab">Collaboration</option>
+            <option value="support">Order Support</option>
+            <option value="other">Other</option>
+          </select>
+          <span class="error-text" id="err-subject"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field full">
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" required placeholder="Tell us what you're looking for..."></textarea>
+          <span class="error-text" id="err-message"></span>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+      <div class="form-status" id="formStatus"></div>
+    </form>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2026 Expressionale Fashion Designs. All rights reserved.</span>
+    <span>Developed by Diplomatic</span>
+  </div>
+</footer>
+
+<script src="cart.js"></script>
+<script src="search.js"></script>
+<script>
+
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    navToggle.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    });
+  });
+  window.addEventListener('resize', () => {
+    if(window.innerWidth > 860){
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    }
+  });
+
+  try { initSiteSearch(); } catch (e) { console.error('Search init failed:', e); }
+
+  // contact form validation + fake submit
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function setError(id, msg){
+    const el = document.getElementById('err-' + id);
+    if(el) el.textContent = msg;
+  }
+  function clearErrors(){
+    ['fname','lname','email','subject','message'].forEach(id => setError(id, ''));
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    clearErrors();
+    status.className = 'form-status';
+    status.textContent = '';
+
+    let valid = true;
+    const fname = document.getElementById('fname').value.trim();
+    const lname = document.getElementById('lname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value.trim();
+
+    if(!fname){ setError('fname', 'Required'); valid = false; }
+    if(!lname){ setError('lname', 'Required'); valid = false; }
+    if(!email){
+      setError('email', 'Required'); valid = false;
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      setError('email', 'Enter a valid email'); valid = false;
+    }
+    if(!subject){ setError('subject', 'Please select an option'); valid = false; }
+    if(!message){ setError('message', 'Required'); valid = false; }
+
+    if(!valid){
+      status.classList.add('error');
+      status.textContent = 'Please fix the highlighted fields.';
+      return;
+    }
+
+    // Demo submit — replace this block with a real fetch() call to your backend / form service
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    setTimeout(() => {
+      status.classList.add('success');
+      status.textContent = `Thanks ${fname}! Your message has been received — we'll be in touch soon.`;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+      form.reset();
+    }, 900);
+  });
+</script>
+
+</body>
+</html>

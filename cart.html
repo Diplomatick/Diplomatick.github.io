@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart — Expressionale Designz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#151B33;
+    --cobalt:#2B4C9E;
+    --crimson:#B8283F;
+    --marigold:#E8A63D;
+    --emerald:#1E7A55;
+    --ivory:#F7F3EA;
+    --ink:#1A1A1A;
+    --line: rgba(255,255,255,0.14);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    line-height:1.5;
+    background:var(--ivory);
+  }
+  h1,h2,h3,.display{font-family:'Fraunces', serif; font-weight:900; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- Header (shared) ---------- */
+  header{background:var(--indigo); color:#fff; position:sticky; top:0; z-index:50;}
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    padding:16px 32px; max-width:1200px; margin:0 auto;
+  }
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:700; font-size:1.15rem;}
+  .logo-mark{
+    width:38px; height:38px; border-radius:50%; background:var(--crimson);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+  }
+  nav{display:flex; gap:28px;}
+  nav a{font-size:0.94rem; font-weight:500; opacity:0.85; position:relative; padding:4px 0; transition:opacity .2s;}
+  nav a:hover{opacity:1;}
+  nav a.active{opacity:1;}
+  nav a.active::after, nav a:hover::after{width:100%;}
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0%; height:2px;
+    background:var(--marigold); transition:width .2s ease;
+  }
+  .header-actions{display:flex; align-items:center; gap:16px;}
+  .search{display:flex; border-radius:999px; overflow:hidden; background:rgba(255,255,255,0.08); border:1px solid var(--line);}
+  .search input{background:transparent; border:none; padding:9px 14px; color:#fff; font-size:0.85rem; width:170px; outline:none;}
+  .search input::placeholder{color:rgba(255,255,255,0.5);}
+  .search button{background:var(--marigold); border:none; padding:9px 16px; font-weight:600; font-size:0.85rem; cursor:pointer; color:var(--ink);}
+  .cart{
+    position:relative; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,0.18); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;
+  }
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--crimson); color:#fff;
+    font-size:0.68rem; font-weight:700; width:19px; height:19px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-toggle{display:none; background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer;}
+
+  .mobile-menu{
+    display:none;
+    flex-direction:column;
+    background:var(--indigo);
+    border-top:1px solid var(--line);
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+  }
+  .mobile-menu.open{max-height:400px;}
+  .mobile-menu a{
+    color:#fff;
+    font-size:1rem;
+    font-weight:500;
+    padding:16px 32px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-menu a.active{color:var(--marigold);}
+  .mobile-menu .mobile-search{
+    display:flex;
+    padding:14px 32px 18px;
+    gap:8px;
+  }
+  .mobile-menu .mobile-search input{
+    flex:1;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:9px 14px;
+    color:#fff;
+    font-size:0.85rem;
+    outline:none;
+  }
+  .mobile-menu .mobile-search input::placeholder{color:rgba(255,255,255,0.5);}
+  .mobile-menu .mobile-search button{
+    background:var(--marigold);
+    border:none;
+    padding:9px 16px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    color:var(--ink);
+  }
+
+  .weave{
+    height:8px;
+    background: repeating-linear-gradient(90deg,
+      var(--crimson) 0 18px, var(--marigold) 18px 30px,
+      var(--cobalt) 30px 54px, var(--ivory) 54px 60px);
+  }
+
+  /* ---------- Cart layout ---------- */
+  .cart-hero{ text-align:center; padding:50px 32px 8px; }
+  .cart-hero h1{ font-size:clamp(1.9rem, 4vw, 2.6rem); color:var(--indigo); }
+  .cart-hero p{ color:#666; margin-top:8px; font-size:0.92rem; }
+
+  .cart-layout{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:36px;
+    padding:40px 32px 100px;
+    max-width:1100px;
+    margin:0 auto;
+    align-items:start;
+  }
+
+  .cart-items{
+    background:#fff;
+    border-radius:var(--radius);
+    box-shadow:0 12px 30px rgba(21,27,51,0.08);
+    overflow:hidden;
+  }
+  .cart-row{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:20px;
+    border-bottom:1px solid rgba(21,27,51,0.08);
+  }
+  .cart-row:last-child{ border-bottom:none; }
+
+  .item-thumb{
+    width:72px; height:88px;
+    border-radius:8px;
+    flex-shrink:0;
+  }
+  .p1{background:repeating-linear-gradient(60deg, var(--cobalt) 0 12px, #1d3a80 12px 24px, var(--crimson) 24px 26px);}
+  .p2{background:repeating-linear-gradient(15deg, var(--marigold) 0 18px, #cf9530 18px 32px), repeating-linear-gradient(105deg, transparent 0 30px, #2c2c2c 30px 32px);}
+  .p3{background:repeating-linear-gradient(90deg, #4527a0 0 10px, var(--cobalt) 10px 20px);}
+  .m1{background:repeating-linear-gradient(60deg, var(--cobalt) 0 12px, #1d3a80 12px 24px, var(--marigold) 24px 26px);}
+  .m2{background:repeating-linear-gradient(15deg, var(--marigold) 0 18px, #cf9530 18px 32px), repeating-linear-gradient(105deg, transparent 0 30px, #2c2c2c 30px 32px);}
+  .m3{background:repeating-linear-gradient(90deg, #4527a0 0 10px, var(--cobalt) 10px 20px);}
+  .m4{background:repeating-linear-gradient(30deg, var(--crimson) 0 14px, #7a1526 14px 20px, var(--marigold) 20px 26px);}
+
+  .item-info{ flex:1; min-width:0; }
+  .item-info h4{ font-size:1rem; font-weight:700; margin-bottom:2px; }
+  .item-info .id{ font-size:0.76rem; color:var(--marigold); font-weight:700; }
+  .item-info .unit-price{ font-size:0.82rem; color:#777; margin-top:4px; }
+
+  .qty-control{
+    display:flex;
+    align-items:center;
+    border:1px solid rgba(21,27,51,0.15);
+    border-radius:999px;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .qty-control button{
+    width:30px; height:30px;
+    border:none;
+    background:var(--ivory);
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:700;
+    color:var(--indigo);
+  }
+  .qty-control button:hover{ background:var(--marigold); color:#fff; }
+  .qty-control span{
+    width:32px;
+    text-align:center;
+    font-weight:700;
+    font-size:0.9rem;
+  }
+
+  .line-total{
+    width:80px;
+    text-align:right;
+    font-weight:700;
+    font-size:0.95rem;
+    flex-shrink:0;
+  }
+
+  .remove-btn{
+    background:none;
+    border:none;
+    color:var(--crimson);
+    font-size:1.2rem;
+    cursor:pointer;
+    flex-shrink:0;
+    line-height:1;
+    padding:6px;
+    border-radius:50%;
+    transition:background .2s;
+  }
+  .remove-btn:hover{ background:rgba(184,40,63,0.1); }
+
+  .empty-cart{
+    padding:70px 30px;
+    text-align:center;
+    color:#777;
+  }
+  .empty-cart .icon{ font-size:2.4rem; margin-bottom:16px; }
+  .empty-cart a{
+    display:inline-block;
+    margin-top:20px;
+    background:var(--indigo);
+    color:#fff;
+    padding:12px 26px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.9rem;
+  }
+
+  .cart-actions{
+    display:flex;
+    justify-content:space-between;
+    padding:16px 20px;
+    background:var(--ivory);
+  }
+  .clear-btn{
+    background:none;
+    border:1px solid rgba(21,27,51,0.2);
+    color:#555;
+    padding:9px 18px;
+    border-radius:999px;
+    font-size:0.82rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .clear-btn:hover{ background:rgba(184,40,63,0.08); border-color:var(--crimson); color:var(--crimson); }
+
+  /* ---------- Summary ---------- */
+  .summary{
+    background:var(--indigo);
+    color:#fff;
+    border-radius:var(--radius);
+    padding:30px 28px;
+  }
+  .summary h3{ font-family:'Inter'; font-size:1.05rem; margin-bottom:20px; }
+  .summary-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.9rem;
+    margin-bottom:14px;
+    color:rgba(255,255,255,0.8);
+  }
+  .summary-row.total{
+    color:#fff;
+    font-weight:700;
+    font-size:1.1rem;
+    border-top:1px solid var(--line);
+    padding-top:16px;
+    margin-top:6px;
+  }
+  .checkout-btn{
+    width:100%;
+    background:var(--marigold);
+    color:var(--ink);
+    border:none;
+    padding:14px 0;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.95rem;
+    cursor:pointer;
+    margin-top:22px;
+    transition:transform .15s ease;
+  }
+  .checkout-btn:hover{ transform:translateY(-2px); }
+  .checkout-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+  .continue-link{
+    display:block;
+    text-align:center;
+    margin-top:14px;
+    font-size:0.82rem;
+    color:rgba(255,255,255,0.65);
+  }
+  .continue-link:hover{ color:var(--marigold); }
+
+  .checkout-note{
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:8px;
+    background:rgba(30,122,85,0.18);
+    color:#a8e8cf;
+    font-size:0.8rem;
+    display:none;
+  }
+  .checkout-note.show{ display:block; }
+
+  /* ---------- Billing modal ---------- */
+  .billing-overlay{
+    position:fixed; inset:0;
+    background:rgba(21,27,51,0.55);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    z-index:300;
+    padding:60px 20px;
+    overflow-y:auto;
+  }
+  .billing-overlay.open{ display:flex; }
+  .billing-modal{
+    background:#fff;
+    border-radius:var(--radius);
+    width:100%;
+    max-width:420px;
+    padding:32px 30px 28px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.35);
+  }
+  .billing-modal h2{
+    text-align:center;
+    font-size:1.4rem;
+    color:var(--ink);
+    margin-bottom:22px;
+  }
+  .billing-items{ margin-bottom:16px; }
+  .billing-item-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:0.9rem;
+    margin-bottom:8px;
+    gap:10px;
+  }
+  .billing-item-row .name{ font-weight:600; }
+  .billing-item-row .sku{ color:var(--marigold); font-weight:700; font-size:0.85rem; }
+  .billing-item-row .line{ color:#555; white-space:nowrap; font-size:0.85rem; }
+  .billing-total{
+    font-weight:700;
+    font-size:1.05rem;
+    border-top:1px solid rgba(21,27,51,0.1);
+    padding-top:12px;
+    margin-bottom:22px;
+  }
+
+  .billing-field{ margin-bottom:16px; }
+  .billing-field label{
+    display:block;
+    font-size:0.85rem;
+    font-weight:600;
+    margin-bottom:6px;
+    color:#333;
+  }
+  .billing-field input{
+    width:100%;
+    border:1px solid rgba(21,27,51,0.2);
+    border-radius:6px;
+    padding:10px 12px;
+    font-size:0.9rem;
+    font-family:inherit;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .billing-field input:focus{ border-color:var(--cobalt); }
+  .billing-field input[readonly]{
+    background:var(--ivory);
+    color:#666;
+  }
+  .billing-field .field-error{
+    color:var(--crimson);
+    font-size:0.76rem;
+    min-height:14px;
+    display:block;
+    margin-top:4px;
+  }
+
+  .billing-actions{ display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+  .billing-actions button{
+    width:100%;
+    border:none;
+    padding:13px 0;
+    border-radius:8px;
+    font-weight:700;
+    font-size:0.92rem;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease;
+  }
+  .billing-actions button:hover{ transform:translateY(-1px); }
+  #payNowBtn{ background:var(--marigold); color:var(--ink); }
+  #payNowBtn:hover{ background:#d8952f; }
+  #cancelBillingBtn{ background:#e9e9e9; color:#444; }
+  #cancelBillingBtn:hover{ background:#dcdcdc; }
+  #clearBillingBtn{ background:var(--marigold); color:var(--ink); opacity:0.9; }
+
+  .billing-success{
+    text-align:center;
+    padding:10px 4px 4px;
+  }
+  .billing-success .check{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--emerald);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.6rem;
+    margin:0 auto 14px;
+  }
+  .billing-success h3{ margin-bottom:8px; }
+  .billing-success p{ color:#666; font-size:0.9rem; margin-bottom:20px; }
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--indigo); color:rgba(255,255,255,0.75); padding:40px 0 24px;}
+  .footer-bottom{
+    max-width:1200px; margin:0 auto; padding:0 32px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:0.8rem;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    nav, .search{display:none;}
+    .nav-toggle{display:block;}
+    .mobile-menu{display:flex;}
+  }
+  @media (max-width: 900px){
+    .cart-layout{ grid-template-columns:1fr; padding:30px 20px 70px; }
+  }
+  @media (max-width: 560px){
+    .cart-row{ flex-wrap:wrap; }
+    .item-thumb{ width:60px; height:74px; }
+    .line-total{ width:auto; margin-left:auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-mark">✋</span>
+      Expressionale Designz
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search">
+        <input type="text" placeholder="Search products...">
+        <button type="button">Search</button>
+      </div>
+      <a class="cart" id="cartIcon" href="cart.html" style="background:rgba(255,255,255,0.22);">
+        🛍️
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <div class="mobile-search"><input type="text" placeholder="Search products..."><button type="button">Search</button></div>
+</div>
+
+<div class="weave"></div>
+
+<section class="cart-hero wrap">
+  <h1>Your Shopping Cart</h1>
+  <p>Review your picks, adjust quantities, and check out when you're ready.</p>
+</section>
+
+<div class="cart-layout">
+  <div class="cart-items" id="cartItemsWrap">
+    <!-- populated by JS -->
+  </div>
+
+  <div class="summary">
+    <h3>Order Summary</h3>
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span id="subtotal">$0.00</span>
+    </div>
+    <div class="summary-row">
+      <span>Shipping</span>
+      <span id="shippingRow">$0.00</span>
+    </div>
+    <div class="summary-row total">
+      <span>Total</span>
+      <span id="grandTotal">$0.00</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+    <a href="shop.html" class="continue-link">← Continue Shopping</a>
+    <div class="checkout-note" id="checkoutNote"></div>
+  </div>
+</div>
+
+<!-- Billing details modal -->
+<div class="billing-overlay" id="billingOverlay">
+  <div class="billing-modal" id="billingModal">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2026 Expressionale Fashion Designs. All rights reserved.</span>
+    <span>Developed by Diplomatic</span>
+  </div>
+</footer>
+
+<script src="cart.js"></script>
+<script src="search.js"></script>
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    navToggle.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    });
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 860) {
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    }
+  });
+
+  try { initSiteSearch(); } catch (e) { console.error('Search init failed:', e); }
+
+  const itemsWrap = document.getElementById('cartItemsWrap');
+  const subtotalEl = document.getElementById('subtotal');
+  const shippingRowEl = document.getElementById('shippingRow');
+  const grandTotalEl = document.getElementById('grandTotal');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const checkoutNote = document.getElementById('checkoutNote');
+
+  const SHIPPING_FLAT = 6.00;
+
+  function fmt(n){ return '$' + n.toFixed(2); }
+
+  function renderCart(){
+    const cart = getCart();
+
+    if (cart.length === 0) {
+      itemsWrap.innerHTML = `
+        <div class="empty-cart">
+          <div class="icon">🛍️</div>
+          <h3>Your cart is empty</h3>
+          <p>Looks like you haven't added anything yet.</p>
+          <a href="shop.html">Browse the Shop</a>
+        </div>`;
+      subtotalEl.textContent = fmt(0);
+      shippingRowEl.textContent = fmt(0);
+      grandTotalEl.textContent = fmt(0);
+      checkoutBtn.disabled = true;
+      checkoutNote.classList.remove('show');
+      updateCartBadge();
+      return;
+    }
+
+    checkoutBtn.disabled = false;
+
+    const rows = cart.map(item => `
+      <div class="cart-row" data-id="${item.id}">
+        <div class="item-thumb ${item.swatch || 'p1'}"></div>
+        <div class="item-info">
+          <h4>${item.name}</h4>
+          <div class="id">#${item.id}</div>
+          <div class="unit-price">${fmt(item.price)} each</div>
+        </div>
+        <div class="qty-control">
+          <button class="qty-minus" aria-label="Decrease quantity">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-plus" aria-label="Increase quantity">+</button>
+        </div>
+        <div class="line-total">${fmt(item.price * item.qty)}</div>
+        <button class="remove-btn" aria-label="Remove item">&times;</button>
+      </div>
+    `).join('');
+
+    const actions = `
+      <div class="cart-actions">
+        <button class="clear-btn" id="clearCartBtn">Clear Cart</button>
+        <span style="font-size:0.82rem; color:#777;">${cart.reduce((s,i)=>s+i.qty,0)} item(s)</span>
+      </div>`;
+
+    itemsWrap.innerHTML = rows + actions;
+
+    const subtotal = getCartTotal();
+    const shipping = subtotal > 0 ? SHIPPING_FLAT : 0;
+    subtotalEl.textContent = fmt(subtotal);
+    shippingRowEl.textContent = fmt(shipping);
+    grandTotalEl.textContent = fmt(subtotal + shipping);
+
+    // wire up row controls
+    itemsWrap.querySelectorAll('.cart-row').forEach(row => {
+      const id = row.dataset.id;
+      const item = cart.find(i => i.id === id);
+
+      row.querySelector('.qty-plus').addEventListener('click', () => {
+        setQuantity(id, item.qty + 1);
+        renderCart();
+      });
+      row.querySelector('.qty-minus').addEventListener('click', () => {
+        setQuantity(id, item.qty - 1);
+        renderCart();
+      });
+      row.querySelector('.remove-btn').addEventListener('click', () => {
+        removeFromCart(id);
+        renderCart();
+      });
+    });
+
+    document.getElementById('clearCartBtn').addEventListener('click', () => {
+      if (confirm('Remove all items from your cart?')) {
+        clearCart();
+        renderCart();
+      }
+    });
+
+    updateCartBadge();
+  }
+
+  checkoutBtn.addEventListener('click', () => {
+    openBillingModal();
+  });
+
+  const billingOverlay = document.getElementById('billingOverlay');
+  const billingModal = document.getElementById('billingModal');
+
+  function randomCoupon(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 5; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
+  }
+
+  function renderBillingForm(){
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    const subtotal = getCartTotal();
+    const shipping = SHIPPING_FLAT;
+    const total = subtotal + shipping;
+    const skus = cart.map(i => '#' + i.id).join(', ');
+    const coupon = randomCoupon();
+
+    const itemRows = cart.map(item => `
+      <div class="billing-item-row">
+        <div>
+          <span class="name">${item.name}</span> <span class="sku">#${item.id}</span>
+        </div>
+        <div class="line">${fmt(item.price)} x ${item.qty}</div>
+      </div>
+    `).join('');
+
+    billingModal.innerHTML = `
+      <h2>Billing Details</h2>
+      <div class="billing-items">${itemRows}</div>
+      <div class="billing-total">Total: ${fmt(total)}</div>
+
+      <form id="billingForm" novalidate>
+        <div class="billing-field">
+          <label for="billName">Full Name:</label>
+          <input type="text" id="billName" required>
+          <span class="field-error" id="err-billName"></span>
+        </div>
+        <div class="billing-field">
+          <label for="billEmail">Email:</label>
+          <input type="email" id="billEmail" required>
+          <span class="field-error" id="err-billEmail"></span>
+        </div>
+        <div class="billing-field">
+          <label for="billAddress">Address:</label>
+          <input type="text" id="billAddress" required>
+          <span class="field-error" id="err-billAddress"></span>
+        </div>
+        <div class="billing-field">
+          <label for="billSku">Product Number (tagged):</label>
+          <input type="text" id="billSku" value="${skus}" readonly>
+        </div>
+        <div class="billing-field">
+          <label for="billCoupon">Coupon Code:</label>
+          <input type="text" id="billCoupon" value="${coupon}" readonly>
+        </div>
+
+        <div class="billing-actions">
+          <button type="submit" id="payNowBtn">Pay Now</button>
+          <button type="button" id="cancelBillingBtn">Cancel</button>
+          <button type="button" id="clearBillingBtn">Clear</button>
+        </div>
+      </form>
+    `;
+
+    document.getElementById('billingForm').addEventListener('submit', handleBillingSubmit);
+    document.getElementById('cancelBillingBtn').addEventListener('click', closeBillingModal);
+    document.getElementById('clearBillingBtn').addEventListener('click', () => {
+      document.getElementById('billName').value = '';
+      document.getElementById('billEmail').value = '';
+      document.getElementById('billAddress').value = '';
+    });
+  }
+
+  function handleBillingSubmit(e){
+    e.preventDefault();
+    let valid = true;
+
+    const name = document.getElementById('billName').value.trim();
+    const email = document.getElementById('billEmail').value.trim();
+    const address = document.getElementById('billAddress').value.trim();
+
+    document.getElementById('err-billName').textContent = '';
+    document.getElementById('err-billEmail').textContent = '';
+    document.getElementById('err-billAddress').textContent = '';
+
+    if (!name) { document.getElementById('err-billName').textContent = 'Required'; valid = false; }
+    if (!email) {
+      document.getElementById('err-billEmail').textContent = 'Required'; valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById('err-billEmail').textContent = 'Enter a valid email'; valid = false;
+    }
+    if (!address) { document.getElementById('err-billAddress').textContent = 'Required'; valid = false; }
+
+    if (!valid) return;
+
+    const total = getCartTotal() + SHIPPING_FLAT;
+
+    // Demo payment — replace this block with a real payment gateway integration
+    billingModal.innerHTML = `
+      <div class="billing-success">
+        <div class="check">✓</div>
+        <h3>Payment Successful</h3>
+        <p>Thanks, ${name}! Your order total of ${fmt(total)} has been placed. A confirmation will be sent to ${email}.</p>
+        <div class="billing-actions">
+          <button type="button" id="closeSuccessBtn">Close</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('closeSuccessBtn').addEventListener('click', () => {
+      clearCart();
+      renderCart();
+      closeBillingModal();
+    });
+  }
+
+  function openBillingModal(){
+    renderBillingForm();
+    billingOverlay.classList.add('open');
+  }
+  function closeBillingModal(){
+    billingOverlay.classList.remove('open');
+  }
+  billingOverlay.addEventListener('click', (e) => {
+    if (e.target === billingOverlay) closeBillingModal();
+  });
+
+  renderCart();
+</script>
+
+</body>
+</html>

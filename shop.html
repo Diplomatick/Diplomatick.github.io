@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Expressionale Designz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#151B33;
+    --cobalt:#2B4C9E;
+    --crimson:#B8283F;
+    --marigold:#E8A63D;
+    --ivory:#F7F3EA;
+    --ink:#1A1A1A;
+    --line: rgba(255,255,255,0.14);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    line-height:1.5;
+    background:linear-gradient(120deg, #b7f0d6 0%, #7fd8ec 40%, #8f9bf0 70%, #b79ef0 100%);
+    min-height:100vh;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces', serif; font-weight:900; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- Header (shared with homepage) ---------- */
+  header{background:var(--indigo); color:#fff; position:sticky; top:0; z-index:50;}
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    padding:16px 32px; max-width:1200px; margin:0 auto;
+  }
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:700; font-size:1.15rem;}
+  .logo-mark{
+    width:38px; height:38px; border-radius:50%; background:var(--crimson);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+  }
+  nav{display:flex; gap:28px;}
+  nav a{font-size:0.94rem; font-weight:500; opacity:0.85; position:relative; padding:4px 0; transition:opacity .2s;}
+  nav a:hover{opacity:1;}
+  nav a.active{opacity:1;}
+  nav a.active::after, nav a:hover::after{width:100%;}
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0%; height:2px;
+    background:var(--marigold); transition:width .2s ease;
+  }
+  .header-actions{display:flex; align-items:center; gap:16px;}
+  .search{display:flex; border-radius:999px; overflow:hidden; background:rgba(255,255,255,0.08); border:1px solid var(--line);}
+  .search input{background:transparent; border:none; padding:9px 14px; color:#fff; font-size:0.85rem; width:170px; outline:none;}
+  .search input::placeholder{color:rgba(255,255,255,0.5);}
+  .search button{background:var(--marigold); border:none; padding:9px 16px; font-weight:600; font-size:0.85rem; cursor:pointer; color:var(--ink);}
+  .cart{
+    position:relative; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,0.08); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;
+  }
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--crimson); color:#fff;
+    font-size:0.68rem; font-weight:700; width:19px; height:19px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-toggle{display:none; background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer;}
+
+  .mobile-menu{
+    display:none;
+    flex-direction:column;
+    background:var(--indigo);
+    border-top:1px solid var(--line);
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+  }
+  .mobile-menu.open{max-height:400px;}
+  .mobile-menu a{
+    color:#fff;
+    font-size:1rem;
+    font-weight:500;
+    padding:16px 32px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-menu a.active{color:var(--marigold);}
+  .mobile-menu .mobile-search{
+    display:flex;
+    padding:14px 32px 18px;
+    gap:8px;
+  }
+  .mobile-menu .mobile-search input{
+    flex:1;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:9px 14px;
+    color:#fff;
+    font-size:0.85rem;
+    outline:none;
+  }
+  .mobile-menu .mobile-search input::placeholder{color:rgba(255,255,255,0.5);}
+  .mobile-menu .mobile-search button{
+    background:var(--marigold);
+    border:none;
+    padding:9px 16px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+    color:var(--ink);
+  }
+
+
+  .weave{
+    height:8px;
+    background: repeating-linear-gradient(90deg,
+      var(--crimson) 0 18px, var(--marigold) 18px 30px,
+      var(--cobalt) 30px 54px, var(--ivory) 54px 60px);
+  }
+
+  /* ---------- Shop content ---------- */
+  .shop-head{padding:40px 32px 8px;}
+  .collections-tag{
+    display:inline-block;
+    background:var(--crimson);
+    color:#fff;
+    font-weight:700;
+    font-size:1rem;
+    padding:10px 22px;
+    border-radius:4px;
+    margin-bottom:8px;
+  }
+  .shop-sub{
+    max-width:520px;
+    color:rgba(21,27,51,0.75);
+    margin-top:14px;
+    font-size:0.95rem;
+  }
+
+  .filter-bar{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    padding:20px 32px 6px;
+    max-width:1200px; margin:0 auto;
+  }
+  .filter-bar select, .filter-bar .chip{
+    background:rgba(255,255,255,0.65);
+    border:1px solid rgba(21,27,51,0.15);
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .chip.active{background:var(--indigo); color:#fff; border-color:var(--indigo);}
+
+  .products{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:26px;
+    padding:28px 32px 90px;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .card{
+    background:#fff;
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:2px solid #fff;
+    box-shadow:0 8px 22px rgba(21,27,51,0.12);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-6px); box-shadow:0 18px 40px rgba(21,27,51,0.2);}
+  .card-media{
+    aspect-ratio:3/4;
+    position:relative;
+    background:#0e0e12;
+  }
+  .card-media .fill{
+    position:absolute; inset:0;
+  }
+  .card-media .tag{
+    position:absolute; top:12px; left:12px;
+    background:var(--marigold); color:var(--ink);
+    font-size:0.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.05em; padding:5px 10px; border-radius:999px;
+  }
+  .m1{background:repeating-linear-gradient(60deg, var(--cobalt) 0 12px, #1d3a80 12px 24px, var(--crimson) 24px 26px);}
+  .m2{background:repeating-linear-gradient(15deg, var(--marigold) 0 18px, #cf9530 18px 32px), repeating-linear-gradient(105deg, transparent 0 30px, #2c2c2c 30px 32px);}
+  .m3{background:repeating-linear-gradient(90deg, #4527a0 0 10px, var(--cobalt) 10px 20px);}
+  .m4{background:repeating-linear-gradient(30deg, var(--crimson) 0 14px, #7a1526 14px 20px, var(--marigold) 20px 26px);}
+
+  .card-body{padding:16px 18px 20px;}
+  .card-body h3{font-size:1.02rem; margin-bottom:4px; font-family:'Inter'; font-weight:700;}
+  .sku{color:var(--marigold); font-weight:700; font-size:0.82rem; margin-bottom:2px;}
+  .price{font-weight:700; font-size:1rem; color:var(--ink); margin-bottom:12px;}
+  .add-btn{
+    width:100%;
+    background:var(--indigo); color:#fff; border:none;
+    padding:10px 0; border-radius:8px; font-size:0.85rem; font-weight:600;
+    cursor:pointer; transition:background .2s;
+  }
+  .add-btn:hover{background:var(--crimson);}
+
+  footer{background:var(--indigo); color:rgba(255,255,255,0.75); padding:40px 0 24px;}
+  .footer-bottom{
+    max-width:1200px; margin:0 auto; padding:0 32px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:0.8rem;
+  }
+
+  @media (max-width: 980px){
+    .products{grid-template-columns:repeat(2, 1fr);}
+  }
+  @media (max-width: 860px){
+    nav, .search{display:none;}
+    .nav-toggle{display:block;}
+    .mobile-menu{display:flex;}
+  }
+  @media (max-width: 640px){
+    .products{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-mark">✋</span>
+      Expressionale Designz
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <button type="button" id="searchBtn">Search</button>
+      </div>
+      <a class="cart" id="cartIcon" href="cart.html">
+        🛍️
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    <div class="mobile-search"><input type="text" placeholder="Search products..."><button type="button">Search</button></div></div>
+
+<div class="weave"></div>
+
+<div class="shop-head wrap">
+  <span class="collections-tag">New Collections:</span>
+  <p class="shop-sub">Every piece cut from hand-dyed wax print and finished by our tailoring house. Filter below to find your fit.</p>
+</div>
+
+<div class="filter-bar">
+  <span class="chip active" data-filter="all">All</span>
+  <span class="chip" data-filter="dress">Dresses</span>
+  <span class="chip" data-filter="men">Men's Wear</span>
+  <span class="chip" data-filter="set">Sets</span>
+  <select id="sortSelect">
+    <option value="default">Sort: Featured</option>
+    <option value="low">Price: Low to High</option>
+    <option value="high">Price: High to Low</option>
+  </select>
+</div>
+
+<div class="products" id="productGrid">
+
+  <div class="card" data-category="men" data-price="79.99">
+    <div class="card-media"><div class="fill m1"></div><span class="tag">New</span></div>
+    <div class="card-body">
+      <h3>Formal Dress</h3>
+      <div class="sku">#Xpre14</div>
+      <div class="price">$79.99</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="dress" data-price="19.99">
+    <div class="card-media"><div class="fill m2"></div><span class="tag">New</span></div>
+    <div class="card-body">
+      <h3>Beach Dress</h3>
+      <div class="sku">#Xpre15</div>
+      <div class="price">$19.99</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="dress" data-price="49.99">
+    <div class="card-media"><div class="fill m3"></div></div>
+    <div class="card-body">
+      <h3>Elegant Dress</h3>
+      <div class="sku">#Xpre10</div>
+      <div class="price">$49.99</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="dress" data-price="29.99">
+    <div class="card-media"><div class="fill m4"></div></div>
+    <div class="card-body">
+      <h3>Casual Dress</h3>
+      <div class="sku">#Xpre11</div>
+      <div class="price">$29.99</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="dress" data-price="39.99">
+    <div class="card-media"><div class="fill m2"></div></div>
+    <div class="card-body">
+      <h3>Summer Dress</h3>
+      <div class="sku">#Xpre12</div>
+      <div class="price">$39.99</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="dress" data-price="59.99">
+    <div class="card-media"><div class="fill m1"></div></div>
+    <div class="card-body">
+      <h3>Party Dress</h3>
+      <div class="sku">#Xpre13</div>
+      <div class="price">$59.99</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="men" data-price="68.00">
+    <div class="card-media"><div class="fill m3"></div></div>
+    <div class="card-body">
+      <h3>Ankara Agbada Set</h3>
+      <div class="sku">#Xpre16</div>
+      <div class="price">$68.00</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="card" data-category="set" data-price="72.00">
+    <div class="card-media"><div class="fill m4"></div></div>
+    <div class="card-body">
+      <h3>Tunic & Gele Set</h3>
+      <div class="sku">#Xpre17</div>
+      <div class="price">$72.00</div>
+      <button class="add-btn" onclick="handleAdd(this)">Add to Cart</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span>© 2026 Expressionale Fashion Designs. All rights reserved.</span>
+    <span>Developed by Diplomatic</span>
+  </div>
+</footer>
+
+<script src="cart.js"></script>
+<script src="search.js"></script>
+<script>
+
+  // mobile nav toggle — wired first so it can never be blocked by anything below
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    navToggle.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    });
+  });
+  window.addEventListener('resize', () => {
+    if(window.innerWidth > 860){
+      mobileMenu.classList.remove('open');
+      navToggle.textContent = '☰';
+    }
+  });
+
+  function handleAdd(btn){
+    const card = btn.closest('.card');
+    const name = card.querySelector('h3').textContent.trim();
+    const id = card.querySelector('.sku').textContent.trim();
+    const price = parseFloat(card.dataset.price);
+    const swatch = card.querySelector('.fill').className.match(/m\d/)[0];
+
+    addToCart({ id, name, price, swatch });
+
+    const original = btn.textContent;
+    btn.textContent = 'Added ✓';
+    btn.style.background = 'var(--marigold)';
+    btn.style.color = '#1A1A1A';
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1200);
+  }
+
+  // search — filters the grid in place; also works from any other page via ?q=
+  function runSearch(query){
+    const input = document.getElementById('searchInput');
+    const q = (typeof query === 'string' ? query : input.value).trim().toLowerCase();
+    if (typeof query === 'string') input.value = query;
+    document.querySelectorAll('#productGrid .card').forEach(card => {
+      card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+  try { initSiteSearch(runSearch); } catch (e) { console.error('Search init failed:', e); }
+
+  // arrived from another page's search (shop.html?q=...) — pre-fill and apply it
+  try {
+    const incomingQuery = new URLSearchParams(window.location.search).get('q');
+    if (incomingQuery) runSearch(incomingQuery);
+  } catch (e) { console.error('Incoming query parse failed:', e); }
+
+  // category filter chips
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      document.querySelectorAll('#productGrid .card').forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+      });
+    });
+  });
+
+  // sort
+  document.getElementById('sortSelect').addEventListener('change', (e) => {
+    const grid = document.getElementById('productGrid');
+    const cards = Array.from(grid.children);
+    const mode = e.target.value;
+    if(mode === 'low') cards.sort((a,b) => a.dataset.price - b.dataset.price);
+    if(mode === 'high') cards.sort((a,b) => b.dataset.price - a.dataset.price);
+    cards.forEach(c => grid.appendChild(c));
+  });
+</script>
+
+</body>
+</html>
