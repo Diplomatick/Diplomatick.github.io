@@ -419,79 +419,6 @@
   .billing-success h3{ margin-bottom:8px; }
   .billing-success p{ color:#666; font-size:0.9rem; margin-bottom:20px; }
 
-  /* ---------- Payment method step ---------- */
-  .pay-total-strip{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:var(--ivory);
-    border-radius:8px;
-    padding:12px 16px;
-    margin-bottom:20px;
-    font-size:0.9rem;
-    font-weight:700;
-  }
-  .method-list{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    margin-bottom:20px;
-  }
-  .method-option{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    border:1.5px solid rgba(21,27,51,0.15);
-    border-radius:10px;
-    padding:13px 14px;
-    cursor:pointer;
-    transition:border-color .2s, background .2s;
-  }
-  .method-option:hover{ border-color:var(--cobalt); }
-  .method-option.selected{
-    border-color:var(--marigold);
-    background:rgba(232,166,61,0.08);
-  }
-  .method-option input{ accent-color:var(--marigold); width:16px; height:16px; flex-shrink:0; }
-  .method-option .m-icon{
-    width:34px; height:34px;
-    border-radius:8px;
-    background:var(--indigo);
-    color:#fff;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1rem;
-    flex-shrink:0;
-  }
-  .method-option .m-label{ font-size:0.9rem; font-weight:600; }
-  .method-option .m-sub{ font-size:0.76rem; color:#777; margin-top:1px; }
-
-  .card-fields{ margin-bottom:6px; }
-  .card-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-
-  .bank-box{
-    background:var(--ivory);
-    border-radius:8px;
-    padding:16px;
-    font-size:0.85rem;
-    line-height:1.7;
-    margin-bottom:18px;
-  }
-  .bank-box strong{ color:var(--ink); }
-
-  .back-link{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-size:0.82rem;
-    color:#666;
-    cursor:pointer;
-    margin-bottom:16px;
-    background:none;
-    border:none;
-    padding:0;
-  }
-  .back-link:hover{ color:var(--indigo); }
-
   /* ---------- Footer ---------- */
   footer{background:var(--indigo); color:rgba(255,255,255,0.75); padding:40px 0 24px;}
   .footer-bottom{
@@ -731,8 +658,6 @@
     return code;
   }
 
-  let billingData = { name: '', email: '', address: '' };
-
   function renderBillingForm(){
     const cart = getCart();
     if (cart.length === 0) return;
@@ -760,17 +685,17 @@
       <form id="billingForm" novalidate>
         <div class="billing-field">
           <label for="billName">Full Name:</label>
-          <input type="text" id="billName" value="${billingData.name}" required>
+          <input type="text" id="billName" required>
           <span class="field-error" id="err-billName"></span>
         </div>
         <div class="billing-field">
           <label for="billEmail">Email:</label>
-          <input type="email" id="billEmail" value="${billingData.email}" required>
+          <input type="email" id="billEmail" required>
           <span class="field-error" id="err-billEmail"></span>
         </div>
         <div class="billing-field">
           <label for="billAddress">Address:</label>
-          <input type="text" id="billAddress" value="${billingData.address}" required>
+          <input type="text" id="billAddress" required>
           <span class="field-error" id="err-billAddress"></span>
         </div>
         <div class="billing-field">
@@ -783,7 +708,7 @@
         </div>
 
         <div class="billing-actions">
-          <button type="submit" id="payNowBtn">Continue to Payment</button>
+          <button type="submit" id="payNowBtn">Pay Now</button>
           <button type="button" id="cancelBillingBtn">Cancel</button>
           <button type="button" id="clearBillingBtn">Clear</button>
         </div>
@@ -821,212 +746,14 @@
 
     if (!valid) return;
 
-    billingData = { name, email, address };
-    renderPaymentStep();
-  }
-
-  /* ---------- Step 2: Payment method ---------- */
-  function renderPaymentStep(){
     const total = getCartTotal() + SHIPPING_FLAT;
 
-    billingModal.innerHTML = `
-      <button type="button" class="back-link" id="backToBilling">‹ Back to Billing Details</button>
-      <h2>Choose Payment Method</h2>
-      <div class="pay-total-strip">
-        <span>Amount Due</span>
-        <span>${fmt(total)}</span>
-      </div>
-
-      <div class="method-list" id="methodList">
-        <label class="method-option selected" data-method="card">
-          <input type="radio" name="payMethod" value="card" checked>
-          <div class="m-icon">💳</div>
-          <div>
-            <div class="m-label">Credit / Debit Card</div>
-            <div class="m-sub">Visa, Mastercard, Verve</div>
-          </div>
-        </label>
-        <label class="method-option" data-method="paypal">
-          <input type="radio" name="payMethod" value="paypal">
-          <div class="m-icon">🅿️</div>
-          <div>
-            <div class="m-label">PayPal</div>
-            <div class="m-sub">Pay with your PayPal balance</div>
-          </div>
-        </label>
-        <label class="method-option" data-method="bank">
-          <input type="radio" name="payMethod" value="bank">
-          <div class="m-icon">🏦</div>
-          <div>
-            <div class="m-label">Bank Transfer</div>
-            <div class="m-sub">Manual transfer with reference code</div>
-          </div>
-        </label>
-      </div>
-
-      <div id="methodDetail"></div>
-    `;
-
-    document.getElementById('backToBilling').addEventListener('click', renderBillingForm);
-
-    const options = document.querySelectorAll('.method-option');
-    options.forEach(opt => {
-      opt.addEventListener('click', () => {
-        options.forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        opt.querySelector('input').checked = true;
-        renderMethodDetail(opt.dataset.method, total);
-      });
-    });
-
-    renderMethodDetail('card', total);
-  }
-
-  function renderMethodDetail(method, total){
-    const wrap = document.getElementById('methodDetail');
-
-    if (method === 'card') {
-      wrap.innerHTML = `
-        <form id="cardForm" class="card-fields" novalidate>
-          <div class="billing-field">
-            <label for="cardName">Name on Card:</label>
-            <input type="text" id="cardName" required>
-            <span class="field-error" id="err-cardName"></span>
-          </div>
-          <div class="billing-field">
-            <label for="cardNumber">Card Number:</label>
-            <input type="text" id="cardNumber" inputmode="numeric" placeholder="1234 5678 9012 3456" maxlength="19" required>
-            <span class="field-error" id="err-cardNumber"></span>
-          </div>
-          <div class="card-row">
-            <div class="billing-field">
-              <label for="cardExpiry">Expiry (MM/YY):</label>
-              <input type="text" id="cardExpiry" inputmode="numeric" placeholder="MM/YY" maxlength="5" required>
-              <span class="field-error" id="err-cardExpiry"></span>
-            </div>
-            <div class="billing-field">
-              <label for="cardCvv">CVV:</label>
-              <input type="text" id="cardCvv" inputmode="numeric" placeholder="123" maxlength="4" required>
-              <span class="field-error" id="err-cardCvv"></span>
-            </div>
-          </div>
-          <div class="billing-actions">
-            <button type="submit" id="payNowBtn">Pay ${fmt(total)}</button>
-          </div>
-        </form>
-      `;
-
-      const numInput = document.getElementById('cardNumber');
-      numInput.addEventListener('input', () => {
-        let digits = numInput.value.replace(/\D/g, '').slice(0, 16);
-        numInput.value = digits.replace(/(.{4})/g, '$1 ').trim();
-      });
-
-      const expInput = document.getElementById('cardExpiry');
-      expInput.addEventListener('input', () => {
-        let digits = expInput.value.replace(/\D/g, '').slice(0, 4);
-        if (digits.length >= 3) digits = digits.slice(0,2) + '/' + digits.slice(2);
-        expInput.value = digits;
-      });
-
-      const cvvInput = document.getElementById('cardCvv');
-      cvvInput.addEventListener('input', () => {
-        cvvInput.value = cvvInput.value.replace(/\D/g, '').slice(0, 4);
-      });
-
-      document.getElementById('cardForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (validateCardForm()) {
-          showSuccess('Card ending in ' + numInput.value.replace(/\D/g,'').slice(-4), total);
-        }
-      });
-
-    } else if (method === 'paypal') {
-      wrap.innerHTML = `
-        <p style="font-size:0.88rem; color:#555; margin-bottom:20px;">
-          You'll be redirected to PayPal to securely log in and confirm this payment of ${fmt(total)}.
-        </p>
-        <div class="billing-actions">
-          <button type="button" id="paypalBtn">Continue with PayPal</button>
-        </div>
-      `;
-      document.getElementById('paypalBtn').addEventListener('click', () => {
-        // Demo — replace with a real PayPal Checkout SDK integration
-        showSuccess('PayPal', total);
-      });
-
-    } else if (method === 'bank') {
-      const ref = randomCoupon();
-      wrap.innerHTML = `
-        <div class="bank-box">
-          <div><strong>Bank:</strong> Expressionale Trust Bank</div>
-          <div><strong>Account Name:</strong> Expressionale Designs Ltd</div>
-          <div><strong>Account Number:</strong> 0123456789</div>
-          <div><strong>Reference:</strong> ${ref}</div>
-        </div>
-        <p style="font-size:0.82rem; color:#777; margin-bottom:18px;">
-          Transfer ${fmt(total)} using the reference code above, then confirm below. Orders are processed once the transfer is verified.
-        </p>
-        <div class="billing-actions">
-          <button type="button" id="bankConfirmBtn">I've Made the Transfer</button>
-        </div>
-      `;
-      document.getElementById('bankConfirmBtn').addEventListener('click', () => {
-        // Demo — replace with a real bank-transfer verification workflow
-        showSuccess('Bank Transfer (ref ' + ref + ')', total);
-      });
-    }
-  }
-
-  function validateCardForm(){
-    let valid = true;
-    const name = document.getElementById('cardName').value.trim();
-    const number = document.getElementById('cardNumber').value.replace(/\D/g, '');
-    const expiry = document.getElementById('cardExpiry').value.trim();
-    const cvv = document.getElementById('cardCvv').value.trim();
-
-    document.getElementById('err-cardName').textContent = '';
-    document.getElementById('err-cardNumber').textContent = '';
-    document.getElementById('err-cardExpiry').textContent = '';
-    document.getElementById('err-cardCvv').textContent = '';
-
-    if (!name) { document.getElementById('err-cardName').textContent = 'Required'; valid = false; }
-
-    if (number.length !== 16) {
-      document.getElementById('err-cardNumber').textContent = 'Enter a valid 16-digit card number'; valid = false;
-    }
-
-    const expMatch = /^(\d{2})\/(\d{2})$/.exec(expiry);
-    if (!expMatch) {
-      document.getElementById('err-cardExpiry').textContent = 'Use MM/YY'; valid = false;
-    } else {
-      const mm = parseInt(expMatch[1], 10);
-      const yy = parseInt(expMatch[2], 10);
-      const now = new Date();
-      const curYY = now.getFullYear() % 100;
-      const curMM = now.getMonth() + 1;
-      if (mm < 1 || mm > 12) {
-        document.getElementById('err-cardExpiry').textContent = 'Invalid month'; valid = false;
-      } else if (yy < curYY || (yy === curYY && mm < curMM)) {
-        document.getElementById('err-cardExpiry').textContent = 'Card has expired'; valid = false;
-      }
-    }
-
-    if (!/^\d{3,4}$/.test(cvv)) {
-      document.getElementById('err-cardCvv').textContent = 'Invalid CVV'; valid = false;
-    }
-
-    return valid;
-  }
-
-  /* ---------- Step 3: Success ---------- */
-  function showSuccess(methodLabel, total){
     // Demo payment — replace this block with a real payment gateway integration
     billingModal.innerHTML = `
       <div class="billing-success">
         <div class="check">✓</div>
         <h3>Payment Successful</h3>
-        <p>Thanks, ${billingData.name}! Your order total of ${fmt(total)} was paid via ${methodLabel}. A confirmation will be sent to ${billingData.email}.</p>
+        <p>Thanks, ${name}! Your order total of ${fmt(total)} has been placed. A confirmation will be sent to ${email}.</p>
         <div class="billing-actions">
           <button type="button" id="closeSuccessBtn">Close</button>
         </div>
@@ -1035,7 +762,6 @@
     document.getElementById('closeSuccessBtn').addEventListener('click', () => {
       clearCart();
       renderCart();
-      billingData = { name: '', email: '', address: '' };
       closeBillingModal();
     });
   }

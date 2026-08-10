@@ -38,12 +38,8 @@
   }
   .logo{display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:700; font-size:1.15rem;}
   .logo-mark{
-    width:44px; height:44px; border-radius:50%; overflow:hidden; flex-shrink:0;
-    border:2px solid rgba(255,255,255,0.18); background:#fff;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .logo-mark img{
-    width:100%; height:100%; object-fit:cover; display:block;
+    width:38px; height:38px; border-radius:50%; background:var(--crimson);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
   }
   nav{display:flex; gap:28px;}
   nav a{font-size:0.94rem; font-weight:500; opacity:0.85; position:relative; padding:4px 0; transition:opacity .2s;}
@@ -170,12 +166,9 @@
     margin:0 auto 26px;
     border:5px solid rgba(255,255,255,0.85);
     box-shadow:0 10px 24px rgba(0,0,0,0.25);
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
   }
-  .avatar-1{background-image:url('pic-5.jpg');}
-  .avatar-2{background-image:url('oshi.png');}
+  .avatar-1{background:repeating-linear-gradient(55deg, #1d3a80 0 10px, #2b4c9e 10px 20px, var(--crimson) 20px 22px);}
+  .avatar-2{background:repeating-linear-gradient(20deg, var(--crimson) 0 14px, var(--marigold) 14px 26px, var(--emerald) 26px 30px);}
   .team-card h3{font-size:1.25rem; font-family:'Inter'; font-weight:700; margin-bottom:6px;}
   .team-card .role{font-size:0.95rem; opacity:0.9;}
   .team-card .bio{
@@ -232,9 +225,7 @@
 <header>
   <div class="header-inner">
     <div class="logo">
-      <span class="logo-mark">
-        <img src="Xpre.png" alt="Expressionale 1">
-      </span>
+      <span class="logo-mark">✋</span>
       Expressionale Designz
     </div>
     <nav>
