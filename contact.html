@@ -179,18 +179,65 @@
   }
   .socials a:hover{background:var(--marigold); color:var(--ink);}
 
-  .map-swatch{
+  .map-card{
     margin-top:26px;
-    border-radius:10px;
-    aspect-ratio:16/9;
-    background:repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 18px),
-               repeating-linear-gradient(-45deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 18px),
-               var(--cobalt);
-    display:flex; align-items:center; justify-content:center;
-    font-size:0.8rem;
-    color:rgba(255,255,255,0.8);
-    text-align:center;
-    padding:16px;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid rgba(21,27,51,0.1);
+    background:#fff;
+    box-shadow:0 18px 36px rgba(21,27,51,0.08);
+  }
+  .map-card-header{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 24px;
+    gap:14px;
+    background:var(--indigo);
+    color:#fff;
+  }
+  .map-card-header h4{
+    margin:0;
+    font-size:1rem;
+    letter-spacing:0.01em;
+  }
+  .map-search{
+    display:flex;
+    width:100%;
+    max-width:420px;
+    gap:10px;
+  }
+  .map-search input{
+    flex:1;
+    border:none;
+    border-radius:999px;
+    padding:10px 16px;
+    font-size:0.95rem;
+    outline:none;
+  }
+  .map-search button{
+    background:var(--marigold);
+    color:var(--ink);
+    border:none;
+    border-radius:999px;
+    padding:10px 18px;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .2s;
+  }
+  .map-search button:hover{transform:translateY(-1px);}
+  .map-frame{
+    width:100%;
+    min-height:320px;
+    border:none;
+    display:block;
+  }
+  .map-card-note{
+    padding:16px 24px 20px;
+    font-size:0.88rem;
+    color:#444;
+    background:#f7f3ea;
   }
 
   /* ---------- Form ---------- */
@@ -368,7 +415,17 @@
       <a href="#" aria-label="TikTok">TT</a>
     </div>
 
-    <div class="map-swatch">Studio location map<br>(embed a real map here)</div>
+    <div class="map-card">
+      <div class="map-card-header">
+        <h4>Studio location</h4>
+        <form id="mapSearchForm" class="map-search">
+          <input id="countrySearchInput" type="text" placeholder="Search a country or city" value="Nigeria" aria-label="Search country or city">
+          <button type="submit" id="countrySearchBtn">Search</button>
+        </form>
+      </div>
+      <iframe id="countryMap" class="map-frame" src="https://maps.google.com/maps?q=Nigeria&output=embed" title="Nigeria map embed"></iframe>
+      <div class="map-card-note">Start by searching a country or city name and the map will update automatically.</div>
+    </div>
   </div>
 
   <div class="form-card">
@@ -534,6 +591,27 @@
       submitBtn.textContent = 'Send Message';
       form.reset();
     }, 900);
+  });
+
+  const mapForm = document.getElementById('mapSearchForm');
+  const mapInput = document.getElementById('countrySearchInput');
+  const mapFrame = document.getElementById('countryMap');
+
+  function updateMapLocation(query){
+    const location = query.trim() || 'Nigeria';
+    mapFrame.src = `https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+  }
+
+  mapForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    updateMapLocation(mapInput.value);
+  });
+
+  mapInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      updateMapLocation(mapInput.value);
+    }
   });
 </script>
 
